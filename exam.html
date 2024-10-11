@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الامتحان</title>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Alexandria', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            direction: rtl;
+            font-size: 20px;
+            display: flex;
+            justify-content: center; /* لمحاذاة المحتوى في المنتصف */
+            align-items: center; /* لمحاذاة المحتوى عمودياً */
+            height: 100vh; /* جعل الارتفاع 100% للشاشة */
+        }
+
+        .content {
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%; /* عرض مرن */
+            max-width: 600px; /* عرض أقصى */
+        }
+
+        header {
+            background-color: #003366;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            border-radius: 10px 10px 0 0; /* زوايا دائرية للجزء العلوي */
+        }
+
+        .question {
+            display: none; /* إخفاء جميع الأسئلة */
+            margin-bottom: 15px;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #005599;
+            text-align: center; /* محاذاة النص في المنتصف */
+        }
+
+        button {
+            background-color: #005599;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        button:hover {
+            background-color: #007bff;
+        }
+
+        #loading {
+            display: none;
+            font-size: 20px;
+            text-align: center;
+            color: #f39c12; /* لون الرسالة */
+            margin-top: 20px; /* مسافة فوق الرسالة */
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between; /* لتوزيع الأزرار بشكل متساوي */
+            margin-top: 20px; /* مسافة فوق الأزرار */
+        }
+
+        #result {
+            display: none;
+        }
+
+        #countdown {
+            font-size: 24px;
+            text-align: center;
+            color: #c0392b; /* لون العد التنازلي */
+        }
+
+        #homeButton {
+            display: none; /* إخفاء زر العودة في البداية */
+            margin-top: 20px; /* مسافة فوق الزر */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="content">
+        <header>
+            <h1>الامتحان</h1>
+            <div id="countdown">الوقت المتبقي: <span id="timer">00:00</span></div> <!-- إضافة العد التنازلي -->
+        </header>
+
+        <div id="quiz">
+            <div class="question" id="question1">
+                <p>1.كان الله ولا شئ معه. اعرب كامة الله:</p>
+                <input type="radio" name="q1" value="1" onchange="saveAnswer(1)"> فاعلا<br>
+                <input type="radio" name="q1" value="0" onchange="saveAnswer(1)"> اسم كان<br>
+                <input type="radio" name="q1" value="0" onchange="saveAnswer(1)"> خبر كان<br>
+                <input type="radio" name="q1" value="0" onchange="saveAnswer(1)"> نائب فاعل<br>
+            </div>
+            <div class="question" id="question2">
+                <p>2. كان البدر قد طلع. نوع خبر كان في هذة الجملة:</p>
+                <input type="radio" name="q2" value="0" onchange="saveAnswer(2)"> مفرد<br>
+                <input type="radio" name="q2" value="0" onchange="saveAnswer(2)"> جملة اسمية<br>
+                <input type="radio" name="q2" value="1" onchange="saveAnswer(2)"> جملة فعلية<br>
+                <input type="radio" name="q2" value="0" onchange="saveAnswer(2)"> شبة جمله<br>
+            </div>
+            <div class="question" id="question3">
+                <p>3. اضحت الابار مياهها كثيرة. كثيره تعرب :</p>
+                <input type="radio" name="q3" value="0" onchange="saveAnswer(3)"> خبر اضحى<br>
+                <input type="radio" name="q3" value="1" onchange="saveAnswer(3)"> خبر<br>
+                <input type="radio" name="q3" value="0" onchange="saveAnswer(3)"> مبتدا موئخر<br>
+                <input type="radio" name="q3" value="0" onchange="saveAnswer(3)"> اسم اصبح<br>
+            </div>
+            <div class="question" id="question4">
+                <p>4. تجمعت السحب فكان المطر . اعرب كلمة السحب و المطر:</p>
+                <input type="radio" name="q4" value="0" onchange="saveAnswer(4)"> فاعل و اسم كان<br>
+                <input type="radio" name="q4" value="0" onchange="saveAnswer(4)"> نائب فاعل و اسم كان<br>
+                <input type="radio" name="q4" value="1" onchange="saveAnswer(4)"> الكلمتان فاعل<br>
+                <input type="radio" name="q4" value="0" onchange="saveAnswer(4)"> مفعول به و فاعل<br>
+            </div>
+            <div class="question" id="question5">
+                <p>5. ستظل القدس عربية. خبر طل في هذة الجمله:</p>
+                <input type="radio" name="q5" value="0" onchange="saveAnswer(5)"> مرفوع<br>
+                <input type="radio" name="q5" value="1" onchange="saveAnswer(5)"> منصوب<br>
+                <input type="radio" name="q5" value="0" onchange="saveAnswer(5)"> مجرور<br>
+                <input type="radio" name="q5" value="0" onchange="saveAnswer(5)"> مبني<br>
+            </div>
+            <div class="question" id="question6">
+                <p>6. قد يصير العدو صديقا. اسم صار في هذة الجمله مرفوع ب:</p>
+                <input type="radio" name="q6" value="1" onchange="saveAnswer(6)">الضمة الظاهرة<br>
+                <input type="radio" name="q6" value="0" onchange="saveAnswer(6)"> الضمه المقدرة <br>
+                <input type="radio" name="q6" value="0" onchange="saveAnswer(6)"> الواو  <br>
+                <input type="radio" name="q6" value="0" onchange="saveAnswer(6)"> الالف <br>
+            </div>
+            <div class="question" id="question7">
+                <p>7.كلما امسيت حاسبت نفسي. الناء في امسيت في محل رفع:</p>
+                <input type="radio" name="q7" value="1" onchange="saveAnswer(7)"> فاعل<br>
+                <input type="radio" name="q7" value="0" onchange="saveAnswer(7)"> نائب فاعل<br>
+                <input type="radio" name="q7" value="0" onchange="saveAnswer(7)"> اسم امسى<br>
+                <input type="radio" name="q7" value="0" onchange="saveAnswer(7)"> مفعول به<br>
+            </div>
+            <div class="question" id="question8">
+                <p>8. اضحى الطالب عقله راجح. عقله تعرب:</p>
+                <input type="radio" name="q8" value="0" onchange="saveAnswer(8)"> خبر اضحى<br>
+                <input type="radio" name="q8" value="0" onchange="saveAnswer(8)"> اسم اضحى <br>
+                <input type="radio" name="q8" value="0" onchange="saveAnswer(8)"> فاعل <br>
+                <input type="radio" name="q8" value="1" onchange="saveAnswer(8)"> مبتدا <br>
+            </div>
+            <div class="question" id="question9">
+                <p>9.اذكر نوع الاستثناء في الجملة التالية : "قام طلاب المجد الا واحدا".</p>
+                <input type="radio" name="q9" value="0" onchange="saveAnswer(9)"> استثناء مفرغ<br>
+                <input type="radio" name="q9" value="0" onchange="saveAnswer(9)"> استثناء غير مفرغ<br>
+                <input type="radio" name="q9" value="1" onchange="saveAnswer(9)"> استثناء تام<br>
+                <input type="radio" name="q9" value="0" onchange="saveAnswer(9)"> استثناء ناقص<br>
+            </div>
+            <div class="question" id="question10">
+                <p>10.تعتبر الهمزة في كلمة "جزء" همزة:</p>
+                <input type="radio" name="q10" value="0" onchange="saveAnswer(10)"> متوسطة<br>
+                <input type="radio" name="q10" value="0" onchange="saveAnswer(10)"> متطرفة<br>
+                <input type="radio" name="q10" value="1" onchange="saveAnswer(10)"> قطع<br>
+                <input type="radio" name="q10" value="0" onchange="saveAnswer(10)"> وصل<br>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button id="prevBtn" onclick="showPrevQuestion()">السؤال السابق</button>
+            <button id="nextBtn" onclick="showNextQuestion()">السؤال التالي</button>
+            <button id="submitBtn" onclick="submitQuiz()">تقديم الامتحان</button>
+        </div>
+        <div id="loading">جارٍ التقديم...</div>
+        <div class="result" id="result"></div>
+        <button id="homeButton" onclick="goHome()">العودة إلى الصفحة الرئيسية</button>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        const questions = document.querySelectorAll('.question');
+        const timerElement = document.getElementById('timer');
+        let timer; // لتخزين وقت العد التنازلي
+        let answers = new Array(questions.length).fill(null); // لتخزين الإجابات
+
+        function showQuestion(index) {
+            questions.forEach((question, i) => {
+                question.style.display = (i === index) ? 'block' : 'none';
+            });
+            updateNavigation();
+        }
+
+        function updateNavigation() {
+            document.getElementById('prevBtn').style.display = (currentQuestion === 0) ? 'none' : 'inline-block';
+            document.getElementById('nextBtn').style.display = (currentQuestion === questions.length - 1) ? 'none' : 'inline-block';
+            document.getElementById('submitBtn').style.display = (currentQuestion === questions.length - 1) ? 'inline-block' : 'none';
+        }
+
+        function showNextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function showPrevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function saveAnswer(questionNumber) {
+            const selectedOption = document.querySelector(`input[name="q${questionNumber}"]:checked`);
+            answers[questionNumber - 1] = selectedOption ? parseInt(selectedOption.value) : null; // حفظ الإجابة
+        }
+
+        function submitQuiz() {
+            document.getElementById('loading').style.display = 'block';
+            setTimeout(() => {
+                const correctAnswers = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]; // الإجابات الصحيحة
+                let score = 0;
+                let resultHTML = '<h2>نتيجة الامتحان:</h2><ul>';
+
+                for (let i = 0; i < questions.length; i++) {
+                    const answer = answers[i];
+                    const isCorrect = answer === correctAnswers[i];
+                    if (isCorrect) score++;
+                    resultHTML += `<li>السؤال ${i + 1}: ${isCorrect ? '✅' : '❌'} إجابتك: ${answer !== null ? (answer === 1 ? 'صحيح' : 'خاطئ') : 'غير مجاب عليه'}</li>`;
+                }
+
+                resultHTML += `</ul><h3>مجموع الدرجات: ${score} من ${questions.length}</h3>`;
+                document.getElementById('result').innerHTML = resultHTML;
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('homeButton').style.display = 'block'; // عرض زر العودة بعد تقديم الامتحان
+                document.getElementById('loading').style.display = 'none';
+            }, 2000);
+        }
+
+        function goHome() {
+            // هنا يمكنك إضافة كود لإعادة توجيه المستخدم إلى الصفحة الرئيسية
+            window.location.href = 'index.html'; // تغيير "homepage.html" إلى عنوان URL الخاص بالصفحة الرئيسية
+        }
+
+        function startTimer(duration) {
+            let remainingTime = duration;
+            timer = setInterval(() => {
+                const minutes = Math.floor(remainingTime / 60);
+                const seconds = remainingTime % 60;
+                timerElement.innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                if (remainingTime <= 0) {
+                    clearInterval(timer);
+                    submitQuiz(); // تقديم الامتحان تلقائياً عندما ينتهي الوقت
+                }
+                remainingTime--;
+            }, 1000);
+        }
+
+        // بدء عرض السؤال الأول
+        showQuestion(currentQuestion);
+        startTimer(1200); // بدء العد التنازلي (20 دقيقة)
+    </script>
+</body>
+
+</html>

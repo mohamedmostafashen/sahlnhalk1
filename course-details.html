@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل الكورس - سهلنهالك</title>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Alexandria', sans-serif; /* استخدام خط Alexandria */
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            direction: rtl;
+            font-size: 20px; /* زيادة حجم الخط */
+        }
+
+        header {
+            background-color: #003366;
+            padding: 40px; /* زيادة الحشو */
+            text-align: center;
+            color: white;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 20px; /* زيادة المسافة بين العناصر */
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 22px; /* زيادة حجم الخط */
+        }
+
+        section.course-details {
+            padding: 60px; /* زيادة الحشو */
+            background-color: #ffffff;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center; /* محاذاة الصورة والنص */
+        }
+
+        .course-image {
+            width: 250px; /* تكبير الصورة */
+            height: auto;
+            border-radius: 10px;
+            margin-left: 20px;
+        }
+
+        .course-description {
+            flex-grow: 1;
+            padding-right: 20px; /* إضافة حشو للجهة اليمنى */
+        }
+
+        .content-section {
+            margin-top: 30px; /* زيادة المسافة بين الأقسام */
+            border-top: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        .toggle-content {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px; /* زيادة المسافة بين العناصر */
+            color: #003366;
+            font-weight: bold;
+            font-size: 24px; /* زيادة حجم الخط */
+        }
+
+        .toggle-content:hover {
+            color: #005599;
+        }
+
+        .toggle-arrow {
+            margin-right: 10px;
+        }
+
+        .content-items {
+            display: none; /* إخفاء العناصر في البداية */
+            margin-left: 30px; /* زيادة المسافة من اليسار */
+        }
+
+        .content-item {
+            padding: 15px; /* زيادة الحشو */
+            background-color: transparent;
+            transition: background-color 0.3s;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            position: relative;
+            margin-bottom: 15px; /* زيادة المسافة بين العناصر */
+        }
+
+        .content-item:hover {
+            background-color: #007bff; /* اللون الأزرق عند الوقوف عليها */
+            color: white;
+        }
+
+        .watch-button,
+        .start-button {
+            background-color: #005599;
+            color: white;
+            border: none;
+            padding: 12px 25px; /* زيادة الحشو */
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px; /* زيادة حجم الخط */
+            position: absolute;
+            top: 50%;
+            left: 10px; /* تعديل المكان إلى اليسار */
+            transform: translateY(-50%);
+            font-family: 'Alexandria', sans-serif; /* تغيير الخط */
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px; /* زيادة الحشو */
+            background-color: #003366;
+            color: white;
+            margin-top: 20px;
+            font-size: 20px; /* زيادة حجم الخط */
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .video-container {
+            display: none; /* إخفاء الفيديو في البداية */
+            margin: 20px 0; /* إضافة مسافة أعلى الفيديو */
+            text-align: center; /* محاذاة الفيديو في المنتصف */
+        }
+
+        .video-controls {
+            margin: 15px 0; /* مسافة بين الفيديو والتحكم */
+        }
+
+        select,
+        button {
+            margin-left: 10px; /* مسافة بين عناصر التحكم */
+            font-size: 18px; /* زيادة حجم الخط */
+            padding: 8px; /* حشو أكبر */
+        }
+
+        /* تقليل حجم الفيديو */
+        video {
+            width: 80%; /* جعل العرض 80% من عرض الصفحة */
+            max-width: 600px; /* الحد الأقصى لعرض الفيديو */
+            height: auto; /* الحفاظ على نسبة العرض إلى الارتفاع */
+        }
+
+        /* تصميم الرسالة المنبثقة */
+        .modal {
+            display: none; /* إخفاء النافذة في البداية */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            text-align: center;
+        }
+
+        .modal button {
+            margin-top: 20px;
+            background-color: #005599;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal button:hover {
+            background-color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="login.html">تسجيل الدخول</a></li>
+                <li><a href="register.html">إنشاء حساب</a></li>
+                <li><a href="course.html">الكورسات</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="video-container" id="videoContainer">
+        <video id="videoPlayer" controls>
+            <source src="C:\Users\M O H A M E D\Desktop\سهلنهالك\الفديوهات\كوكب النحو.mp4" type="video/mp4">
+            متصفحك لا يدعم تشغيل الفيديو.
+        </video>
+        <div class="video-controls">
+            <label for="qualitySelect">جودة الفيديو:</label>
+            <select id="qualitySelect" onchange="changeQuality()">
+                <option value="720">720p</option>
+                <option value="480">480p</option>
+                <option value="360">360p</option>
+                <option value="240">240p</option>
+            </select>
+            <label for="speedSelect">سرعة الفيديو:</label>
+            <select id="speedSelect" onchange="changeSpeed()">
+                <option value="0.5">0.5x</option>
+                <option value="1">عادي</option>
+                <option value="1.25">1.25x</option>
+                <option value="1.5">1.5x</option>
+                <option value="2">2x</option>
+            </select>
+        </div>
+    </div>
+
+    <section class="course-details">
+        <img src="C:\Users\M O H A M E D\Desktop\سهلنهالك\صور\mohamedsalah.jpg" alt="كورس البرمجة الأساسية" class="course-image">
+        <div class="course-description">
+            <h2>كورس البرمجة الأساسية</h2>
+            <p>في هذا الكورس، ستتعلم أساسيات البرمجة بما في ذلك المفاهيم الأساسية، اللغات المستخدمة، وأفضل الممارسات في البرمجة.</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="toggle-content" onclick="toggleContent(this)">
+            <span class="toggle-arrow">▶</span>
+            <span>المحاضرة الأولى</span>
+        </div>
+        <div class="content-items">
+            <div class="content-item">
+                المحاضرة التأسيسية في النحو | للثانوية العامة 2025 | مع الأستاذ محمد صلاح
+                <button class="watch-button" onclick="openVideo(event)">شاهد الآن</button>
+            </div>
+            <!-- إضافة قسم امتحان المحاضرة الأولى -->
+            <div class="content-item">
+                امتحان على المحاضرة الأولى
+                <button class="start-button" onclick="startExam()">ابدأ الامتحان</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="notification" id="notification">جارٍ تحميل الفيديو...</div>
+
+    <div class="modal" id="confirmationModal">
+        <p>تنويه!! هل أنت متأكد من بدء الاختبار؟</p>
+        <button onclick="confirmStartExam()">نعم</button>
+        <button onclick="closeModal()">لا</button>
+    </div>
+
+    <footer class="footer">
+        <p>حقوق الطبع والنشر © 2025 الشناوي</p>
+    </footer>
+
+    <script>
+        function toggleContent(element) {
+            const content = element.nextElementSibling;
+            const arrow = element.querySelector('.toggle-arrow');
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block';
+                arrow.textContent = '▼'; // تغيير السهم إلى أسفل
+            } else {
+                content.style.display = 'none';
+                arrow.textContent = '▶'; // تغيير السهم إلى اليمين
+            }
+        }
+
+        function openVideo(event) {
+            event.stopPropagation(); // منع الحدث من الانتقال للأعلى
+            // إظهار إشعار "جارٍ تحميل الفيديو"
+            const notification = document.getElementById('notification');
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+                // فتح الفيديو
+                const videoContainer = document.getElementById('videoContainer');
+                videoContainer.style.display = 'block'; // عرض الفيديو
+                const videoPlayer = document.getElementById('videoPlayer');
+                videoPlayer.play();
+            }, 1000); // تأخير ظهور الفيديو
+        }
+
+        function changeQuality() {
+            const qualitySelect = document.getElementById('qualitySelect');
+            const selectedQuality = qualitySelect.value;
+            // يمكنك هنا وضع الكود لتحميل جودة الفيديو المختارة
+            alert(`تم تغيير جودة الفيديو إلى ${selectedQuality}p`); // رسالة توضيحية
+        }
+
+        function changeSpeed() {
+            const speedSelect = document.getElementById('speedSelect');
+            const selectedSpeed = speedSelect.value;
+            const videoPlayer = document.getElementById('videoPlayer');
+            videoPlayer.playbackRate = selectedSpeed; // تغيير سرعة الفيديو
+        }
+
+        function startExam() {
+            // عرض نافذة تأكيد البدء في الامتحان
+            const modal = document.getElementById('confirmationModal');
+            modal.style.display = 'block';
+        }
+
+        function confirmStartExam() {
+            window.location.href = 'exam.html'; // التوجيه إلى صفحة الامتحان
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('confirmationModal');
+            modal.style.display = 'none'; // إخفاء النافذة
+        }
+    </script>
+</body>
+
+</html>
